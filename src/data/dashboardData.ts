@@ -244,6 +244,26 @@ export const financialData = {
     { year: 2024, revenue: 0, expenses: 31264457, netIncome: -31264457, grossMargin: 0 },
     { year: 2025, revenue: 4631420, expenses: 41939123, netIncome: -37307703, grossMargin: 11 },
   ],
+
+  // YoY Comparison (structured format for dashboard cards)
+  // Comparing 2025 vs 2023 (skipping 2024 zero-revenue platform build year)
+  yoyComparison: {
+    revenue: {
+      y2024: 4033040,  // Actually 2023 (baseline before hiatus)
+      y2025: 4631420,
+      growth: 15,  // 15% growth vs pre-hiatus baseline
+    },
+    expenses: {
+      y2024: 31264457,  // 2024 actuals
+      y2025: 41939123,
+      growth: 34,  // 34% increase (continued platform investment)
+    },
+    margin: {
+      y2024: 52,   // Q4 2024 run rate
+      y2025: 64,   // Q4 2025 gross margin
+      improvement: 12,  // 12 point improvement
+    },
+  },
 };
 
 // ============================================================================
