@@ -6,8 +6,9 @@ import dynamic from 'next/dynamic';
 const JoeChartDashboard = dynamic(() => import('@/components/JoeChartDashboard'), { ssr: false });
 const FinancialDashboard = dynamic(() => import('@/components/FinancialDashboard'), { ssr: false });
 const GrossMarginDashboard = dynamic(() => import('@/components/GrossMarginDashboard'), { ssr: false });
+const HistoricalDashboard = dynamic(() => import('@/components/HistoricalDashboard'), { ssr: false });
 
-type DashboardType = 'joechart' | 'financial' | 'margin';
+type DashboardType = 'joechart' | 'financial' | 'margin' | 'historical';
 
 interface DashboardTab {
   id: DashboardType;
@@ -19,6 +20,7 @@ const dashboards: DashboardTab[] = [
   { id: 'joechart', label: 'Joe Chart', description: 'Executive Summary (Andy.md Framework)' },
   { id: 'financial', label: 'Financial', description: 'Revenue, expenses & P&L' },
   { id: 'margin', label: 'Gross Margin', description: 'Revenue - COGS analysis' },
+  { id: 'historical', label: 'Historical', description: 'Full timeline 2022-2026 from Klair' },
 ];
 
 export default function Home() {
@@ -36,7 +38,7 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-900">Academics (Tech Stack)</h1>
-                <p className="text-xs text-gray-500">Tier 1 Investment | -$15.9M Cumulative</p>
+                <p className="text-xs text-gray-500">Tier 1 Investment | $81.4M Cumulative (2022-2025)</p>
               </div>
             </div>
 
@@ -46,7 +48,7 @@ export default function Home() {
                 <button
                   key={dashboard.id}
                   onClick={() => setActiveDashboard(dashboard.id)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                     activeDashboard === dashboard.id
                       ? 'bg-white text-purple-600 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
@@ -88,40 +90,53 @@ export default function Home() {
         {activeDashboard === 'joechart' && <JoeChartDashboard />}
         {activeDashboard === 'financial' && <FinancialDashboard />}
         {activeDashboard === 'margin' && <GrossMarginDashboard />}
+        {activeDashboard === 'historical' && <HistoricalDashboard />}
       </div>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-6 mt-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
             <div>
-              <h4 className="text-white font-semibold mb-2">Products</h4>
+              <h4 className="text-white font-semibold mb-2">Revenue Sources</h4>
               <ul className="space-y-1">
-                <li>Lesson Planet - Curriculum content</li>
-                <li>Timeback - Learning management</li>
-                <li>School Management Software</li>
+                <li>2HR Learning Licensing (Standard)</li>
+                <li>2HR Learning Licensing (Virtual/ESA)</li>
+                <li>2HR Learning Licensing (MTSS)</li>
+                <li>Internal Services</li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-2">Data Filters</h4>
+              <h4 className="text-white font-semibold mb-2">Top Cost Centers</h4>
               <ul className="space-y-1">
-                <li>Budget: business_unit = &apos;Academics&apos;</li>
-                <li>Revenue types: Recurring + Non-Recurring</li>
-                <li>Expense types: HC, NHC OPEX, CF, COGS</li>
+                <li>AE Studio - $25.5M</li>
+                <li>LightCI - $5.8M</li>
+                <li>Eigen Consulting - $5.0M</li>
+                <li>AWS/Infrastructure - $3.4M</li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-2">Key Insight</h4>
+              <h4 className="text-white font-semibold mb-2">Timeline</h4>
               <ul className="space-y-1">
-                <li className="text-green-400">Closest to Breakeven</li>
-                <li className="text-yellow-400">52% Gross Margin</li>
-                <li className="text-blue-400">-$9.6M 2026 Gap</li>
+                <li className="text-green-400">2022: Near breakeven (-$317K)</li>
+                <li className="text-yellow-400">2023: Investment ramp (-$12.5M)</li>
+                <li className="text-red-400">2024: Platform build (-$31.3M)</li>
+                <li className="text-purple-400">2025: Revenue launch (-$37.3M)</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-2">Key Metrics</h4>
+              <ul className="space-y-1">
+                <li className="text-green-400">Q4 2025 Margin: 63.8%</li>
+                <li className="text-yellow-400">Jan 2026 Revenue: $857K</li>
+                <li className="text-blue-400">Cumulative: $81.4M invested</li>
+                <li className="text-purple-400">49 months of Klair data</li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-6 pt-6 text-center text-xs">
             <p>Academics (Tech Stack) Joe Chart | Tier 1 Investment Dashboard</p>
-            <p className="mt-1">Last Updated: January 30, 2026</p>
+            <p className="mt-1">Source: Klair (core_budgets.consolidated_budgets_and_actuals) | Last Updated: January 30, 2026</p>
           </div>
         </div>
       </footer>

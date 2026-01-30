@@ -2,12 +2,13 @@
 
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement, Filler } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
-import { joeChartData, financialData, breakevenData } from '@/data/dashboardData';
+import { joeChartData, financialData, breakevenData, historicalData } from '@/data/dashboardData';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement, Filler);
 
 export default function JoeChartDashboard() {
   const { investmentToDate, keyInputLever, breakeven, status, monthlyTrend } = joeChartData;
+  const { yearlySummary } = historicalData;
 
   return (
     <div className="p-5 min-h-screen" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)' }}>
@@ -34,41 +35,54 @@ export default function JoeChartDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           {/* Investment to Date */}
           <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10">
-            <h3 className="text-purple-400 text-sm font-semibold mb-2">INVESTMENT TO DATE</h3>
+            <h3 className="text-purple-400 text-sm font-semibold mb-2">CUMULATIVE INVESTMENT (2022-2025)</h3>
             <div className="text-4xl font-bold text-red-400 mb-2">
               ${Math.abs(investmentToDate.value / 1000000).toFixed(1)}M
             </div>
-            <p className="text-gray-400 text-xs mb-3">Cumulative burn since inception</p>
+            <p className="text-gray-400 text-xs mb-3">Total net loss over 4 years</p>
             <div className="space-y-1 text-xs">
               {investmentToDate.breakdown.map((item) => (
                 <div key={item.year} className="flex justify-between text-gray-500">
                   <span>{item.year}:</span>
-                  <span className="text-red-400">${Math.abs(item.amount / 1000000).toFixed(1)}M</span>
+                  <div className="text-right">
+                    <span className={item.amount > -1000000 ? 'text-yellow-400' : 'text-red-400'}>
+                      ${Math.abs(item.amount / 1000000).toFixed(1)}M
+                    </span>
+                    {item.note && <span className="text-gray-600 ml-1 text-[10px]">({item.note})</span>}
+                  </div>
                 </div>
               ))}
             </div>
-            <div className="bg-green-500/10 border-l-4 border-green-400 p-2 mt-3 rounded-r-lg">
+            <div className="bg-yellow-500/10 border-l-4 border-yellow-400 p-2 mt-3 rounded-r-lg">
               <p className="text-xs text-gray-300">
-                <strong className="text-green-400">Best in Class:</strong> Lowest investment among Tier 1
+                <strong className="text-yellow-400">2022 Context:</strong> Was near breakeven (-$317K) before platform investment
               </p>
             </div>
           </div>
 
           {/* Key Input Lever */}
           <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10">
-            <h3 className="text-purple-400 text-sm font-semibold mb-2">KEY INPUT LEVER</h3>
+            <h3 className="text-purple-400 text-sm font-semibold mb-2">KEY INPUT LEVER: REVENUE</h3>
             <div className="text-4xl font-bold text-green-400 mb-1">
               ${(keyInputLever.revenue2025 / 1000000).toFixed(1)}M
             </div>
-            <p className="text-gray-400 text-xs mb-3">2025 Revenue (YTD)</p>
-            <div className="bg-purple-500/10 rounded-lg p-3">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-400">YoY Growth:</span>
-                <span className="text-lg font-bold text-green-400">+{keyInputLever.revenueGrowth}%</span>
+            <p className="text-gray-400 text-xs mb-3">2025 Revenue (Jul-Dec)</p>
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-gray-500">2022 (baseline):</span>
+                <span className="text-green-400">${(keyInputLever.revenue2022 / 1000000).toFixed(1)}M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">2023 H1 (pre-pause):</span>
+                <span className="text-green-400">${(keyInputLever.revenue2023H1 / 1000000).toFixed(1)}M</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">vs 2023:</span>
+                <span className="text-green-400">+{keyInputLever.revenueGrowth}%</span>
               </div>
             </div>
             <div className="mt-3 pt-3 border-t border-white/10 text-xs text-gray-500">
-              Note: Using revenue as proxy (subscription count not available)
+              {keyInputLever.note}
             </div>
           </div>
 
@@ -152,8 +166,8 @@ export default function JoeChartDashboard() {
               <div className="text-xs text-gray-500">Latest Month Burn</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-green-400">52%</div>
-              <div className="text-xs text-gray-500">Gross Margin</div>
+              <div className="text-lg font-bold text-green-400">{breakeven.grossMarginPct}%</div>
+              <div className="text-xs text-gray-500">Q4 Gross Margin</div>
             </div>
             <div className="text-center">
               <div className="text-lg font-bold text-yellow-400">Improving</div>
@@ -239,7 +253,7 @@ export default function JoeChartDashboard() {
               ))}
             </div>
             <div className="mt-4 pt-4 border-t border-white/10 text-sm text-gray-400">
-              <strong>Path to Profit:</strong> Either +27% revenue growth OR -15% cost reduction
+              <strong>Note:</strong> Budget is conservative (assumes no enrollment growth). Current run rate: $857K/mo revenue.
             </div>
           </div>
         </div>
