@@ -2,7 +2,7 @@
 
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement, Filler } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
-import { joeChartData, financialData, breakevenData, historicalData } from '@/data/dashboardData';
+import { joeChartData, financialData, breakevenData, historicalData, customerMetrics } from '@/data/dashboardData';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement, Filler);
 
@@ -172,6 +172,69 @@ export default function JoeChartDashboard() {
             <div className="text-center">
               <div className="text-lg font-bold text-yellow-400">Improving</div>
               <div className="text-xs text-gray-500">Trend Direction</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Customer & Product Metrics Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Revenue by Product */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10">
+            <h3 className="text-purple-400 mb-4">Revenue by Product (2025-2026)</h3>
+            <div className="space-y-3">
+              {customerMetrics.activeCustomers.products.map((product, idx) => (
+                <div key={idx} className="bg-white/5 rounded-lg p-3">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-300 text-sm font-medium">{product.name}</span>
+                    <span className="text-green-400 font-mono">${(product.monthlyRevenue / 1000).toFixed(0)}K/mo</span>
+                  </div>
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                      style={{ width: `${(product.monthlyRevenue / customerMetrics.activeCustomers.totalMonthlyRevenue) * 100}%` }}
+                    />
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">{product.schools}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+              <span className="text-gray-400 text-sm">Total Monthly Revenue:</span>
+              <span className="text-green-400 font-bold">${(customerMetrics.activeCustomers.totalMonthlyRevenue / 1000).toFixed(0)}K</span>
+            </div>
+          </div>
+
+          {/* Unit Economics & Business Model */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10">
+            <h3 className="text-purple-400 mb-4">Unit Economics & Model Evolution</h3>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="bg-green-500/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold text-green-400">{customerMetrics.activeCustomers.count}</div>
+                <div className="text-xs text-gray-500">Active Products</div>
+              </div>
+              <div className="bg-purple-500/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold text-purple-400">{(customerMetrics.unitEconomics.burnCoverageRatio * 100).toFixed(0)}%</div>
+                <div className="text-xs text-gray-500">Burn Coverage</div>
+              </div>
+            </div>
+            <div className="space-y-2 text-sm mb-4">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Monthly Revenue:</span>
+                <span className="text-green-400">${(customerMetrics.unitEconomics.currentMonthlyRevenue / 1000).toFixed(0)}K</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Monthly Burn:</span>
+                <span className="text-red-400">${(customerMetrics.unitEconomics.currentMonthlyBurn / 1000).toFixed(0)}K</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Gap to Breakeven:</span>
+                <span className="text-yellow-400">${((customerMetrics.unitEconomics.currentMonthlyBurn - customerMetrics.unitEconomics.currentMonthlyRevenue) / 1000).toFixed(0)}K/mo</span>
+              </div>
+            </div>
+            <div className="bg-purple-500/10 border-l-4 border-purple-400 p-3 rounded-r-lg">
+              <p className="text-xs text-gray-300">
+                <strong className="text-purple-400">Model Shift:</strong> Pivoted from tech services (2022-23) to pure 2HR platform licensing (2025+). All revenue now from school curriculum licenses.
+              </p>
             </div>
           </div>
         </div>

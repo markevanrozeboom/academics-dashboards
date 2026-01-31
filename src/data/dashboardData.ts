@@ -123,6 +123,45 @@ export const historicalData = {
 };
 
 // ============================================================================
+// CUSTOMER & PRODUCT METRICS (from Klair revenue analysis)
+// ============================================================================
+export const customerMetrics = {
+  // Revenue by Product Category (Actuals from Klair)
+  revenueByProduct: [
+    { product: '2HR Learning Platform', revenue2025: 4609754, revenue2026YTD: 856542, customers: 3, trend: 'growing' },
+    { product: 'Alpha Internal Services', revenue2022_23: 2466500, customers: 3, trend: 'phased out' },
+    { product: 'Crossover Tech Services', revenue2022_23: 1317333, customers: 1, trend: 'phased out' },
+    { product: 'Pipeline Services', revenue2023: 271500, customers: 3, trend: 'phased out' },
+  ],
+
+  // Business Model Evolution
+  modelEvolution: {
+    phase1: { years: '2022-2023 H1', model: 'Tech Services', description: 'Crossover, Alpha coaching, pipeline services' },
+    phase2: { years: '2023 H2-2024', model: 'Platform Build', description: 'Zero revenue, full investment in 2HR platform' },
+    phase3: { years: '2025+', model: '2HR Platform Licensing', description: 'Schools pay licensing fees for curriculum' },
+  },
+
+  // Current Customers (2025-2026)
+  activeCustomers: {
+    count: 3,
+    products: [
+      { name: '2HR Learning (Standard)', monthlyRevenue: 501310, schools: 'Physical Alpha schools' },
+      { name: '2HR Learning (Virtual/ESA)', monthlyRevenue: 173500, schools: 'Virtual/ESA programs' },
+      { name: '2HR Learning (MTSS)', monthlyRevenue: 106089, schools: 'MTSS intervention programs' },
+    ],
+    totalMonthlyRevenue: 780899,
+  },
+
+  // Unit Economics
+  unitEconomics: {
+    revenuePerProduct: 1543614, // $4.6M / 3 products
+    currentMonthlyBurn: 1342129, // Jan 2026
+    currentMonthlyRevenue: 856542, // Jan 2026
+    burnCoverageRatio: 0.64, // Revenue covers 64% of burn
+  },
+};
+
+// ============================================================================
 // JOE CHART KPIs
 // ============================================================================
 export const joeChartData = {
